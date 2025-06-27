@@ -1,0 +1,45 @@
+name: Validate PR
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history to get tags
+
+      - name: Build Solution
+        uses: artdolya/actions/dotnet@master
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
+          run-tests: true
+
+      - name: Get latest stable tag from master
+        id: latest_tag
+        run: echo "LATEST_TAG=$(git describe --tags --abbrev=0 origin/master)" >> $GITHUB_ENV
+
+      - name: Get PR Number
+        id: pr_number
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Generate Version Tag
+        id: version_tag
+        run: echo "VERSION_TAG=${LATEST_TAG}-pr-${PR_NUMBER}-${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
+      - name: Generated Version Tag
+        run: echo $VERSION_TAG
+
+      # - name: Bump version and push tag
+      #   uses: anothrNick/github-tag-action@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     DEFAULT_BUMP: patch
+      #     WITH_V: false
+      #     PRERELEASE_SUFFIX: pr-${{ github.event.pull_request.number }}
+      #     PRERELEASE: true
