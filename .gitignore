@@ -52,3 +52,13 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# IDE
+.vs/
+.idea/
+.vscode/
+
+# User specific files
+*.csproj.user
+
+*.Development.json
