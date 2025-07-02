@@ -60,5 +60,8 @@ nunit-*.xml
 
 # User specific files
 *.csproj.user
-
 *.Development.json
+**/.env
+
+# Terraform
+**/.terraform/
