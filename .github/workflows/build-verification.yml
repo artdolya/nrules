@@ -1,4 +1,4 @@
-name: RulesEngine
+name: RulesEngine_build&test
 
 on:
   push:
@@ -12,9 +12,9 @@ env:
   DOTNET_VERSION: '9.0.301' # The .NET SDK version to use
 
 jobs:
-  RulesEngine:
+  build-and-test:
 
-    name: RulesEngine-${{matrix.os}}
+    name: RulesEngine_build&test-${{matrix.os}}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -30,5 +30,8 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
       
-    - name: RulesEngine
-      run: dotnet RulesEngine --configuration Release --no-restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+   
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
